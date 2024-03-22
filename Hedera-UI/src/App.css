@@ -1,0 +1,389 @@
+/* @font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-BlackItalic-Web.eot");
+  src: url("../public/fonts/StyreneA-BlackItalic-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-BlackItalic-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-BlackItalic-Web.woff") format("woff");
+  font-weight: 900;
+  font-style: italic;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-Black-Web.eot");
+  src: url("../public/fonts/StyreneA-Black-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-Black-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-Black-Web.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+}
+.StyreneA-Black-Web {
+  font-family: "Styrene A Web";
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-BoldItalic-Web.eot");
+  src: url("../public/fonts/StyreneA-BoldItalic-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-BoldItalic-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-BoldItalic-Web.woff") format("woff");
+  font-weight: 700;
+  font-style: italic;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-Bold-Web.eot");
+  src: url("../public/fonts/StyreneA-Bold-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-Bold-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-Bold-Web.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-MediumItalic-Web.eot");
+  src: url("../public/fonts/StyreneA-MediumItalic-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-MediumItalic-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-MediumItalic-Web.woff") format("woff");
+  font-weight: 500;
+  font-style: italic;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-Medium-Web.eot");
+  src: url("../public/fonts/StyreneA-Medium-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-Medium-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-Medium-Web.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-RegularItalic-Web.eot");
+  src: url("../public/fonts/StyreneA-RegularItalic-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-RegularItalic-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-RegularItalic-Web.woff") format("woff");
+  font-weight: 400;
+  font-style: italic;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-Regular-Web.eot");
+  src: url("../public/fonts/StyreneA-Regular-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-Regular-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-Regular-Web.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-LightItalic-Web.eot");
+  src: url("../public/fonts/StyreneA-LightItalic-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-LightItalic-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-LightItalic-Web.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-Light-Web.eot");
+  src: url("../public/fonts/StyreneA-Light-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-Light-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-Light-Web.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-ThinItalic-Web.eot");
+  src: url("../public/fonts/StyreneA-ThinItalic-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-ThinItalic-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-ThinItalic-Web.woff") format("woff");
+  font-weight: 100;
+  font-style: italic;
+  font-stretch: normal;
+}
+@font-face {
+  font-family: "Styrene A Web";
+  src: url("../public/fonts/StyreneA-Thin-Web.eot");
+  src: url("../public/fonts/StyreneA-Thin-Web.eot?#iefix") format("embedded-opentype"), url("../public/fonts/StyreneA-Thin-Web.woff2") format("woff2"), url("../public/fonts/StyreneA-Thin-Web.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-stretch: normal;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Styrene A Web", "Helvetica Neue", Sans-Serif;
+  font-weight: 400;
+  background-color: rgb(58, 51, 51);
+  color: white;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.builtOnHederaSVG  {
+  height: 60px;
+  width: auto;
+}
+.footer {
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  margin-top: auto;
+  background-color:  #222222;
+} */
+.hbarLogoImg {
+  width: 30px;
+  height: auto;
+  margin-right: 5px;
+}
+.walletLogoImage {
+  width: 30px;
+  height: auto;
+}
+
+/*************************************************Home.css************************************************************/
+.public-nft-container{
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.public-nft-box{
+  height: 450px;
+  width: 315px;
+  border-radius: 15px;
+  margin: 40px 0px 0px 0px;
+  font-size: 20px;
+  background-color: rgb(100, 164, 36);
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight:bold;
+}
+.public-nft-box p {
+  margin: 10px 0px 0px 10px;
+}
+.nft-image-home{
+  height: 220px;
+  width: 300px;
+  border-radius: 15px;
+  margin: 2%;
+}
+
+/********************************************main.css****************************************************************/
+.main-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.main-collection{
+  height: 240px;
+  width: 380px;
+  background-color: rgb(100, 164, 36);
+  margin: 40px 0px 0px 0px;
+  border-radius: 15px;
+}
+.main-collection h3{
+  font-size: 20px;
+  margin: 15px 0px 0px 20px;
+  font-style: italic;
+}
+
+/*******************************************create collection *************************************************/
+
+/*******************************************createnft.css***********************************************************/
+.createnft-container{
+  margin: 5% 0% 0% 0%;
+}
+.createcol-container{
+  border: 5px solid blue;
+  text-align: center;
+  border-radius: 15px;
+  background-color: rgb(24, 28, 24);
+  font-size: 17px;
+  font-style: bold;
+  font-weight :700;
+}
+
+/***************************************Viewnft.css*************************************************************/
+.view-head h3 {
+  text-align: center;
+  font-size: 30px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  color: white;
+}
+
+.view-head h1 {
+  color: red;font-size: 35px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  margin: 0px 0px 0px 0px;
+}
+
+.nft-container {
+ display: flex;
+ justify-content: space-evenly;
+ flex-wrap: wrap;
+}
+
+.nft-box {
+  height: 440px;
+  width: 345px;
+  background-color: rgb(109, 161, 57);
+  border-radius: 15px;
+  margin: 50px 0px 0px 0px;
+  font-size: 20px;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight:bold;
+}
+.view-image{
+  height: 220px;
+  width: 330px;
+  border-radius: 15px;
+  margin: 2%;
+}
+
+.nft-box p {
+  margin: 10px 0px 0px 10px;
+}
+.viewnftbuttons{
+  display: flex;
+  height: 37px;
+}
+
+/*****************************************************nft Details.css ***************************************/
+.nftdetails-container{
+  margin: 3% 0% 0% 0%;
+  width: auto;
+  height: 500px;
+  
+}
+.nft_details {
+  height: 500px;
+  width: auto;
+  display: flex;
+  margin: 0% 0% 0% 10%;
+}
+.content{
+  margin: 0% 0% 0% 10%;
+}
+.nft-image{
+  height: 500px;
+  width: 550px;
+  margin: 0% 0% 0% 0%;
+  border-radius: 15px;
+}
+.nft-audio{
+  margin: 70% 0% 0% 0%;
+}
+.nft-details-image{
+  height: 350px;
+  width: 300px;
+  margin: 10% 0% 0% 90%;
+  border-radius: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  .nftdetails-container{
+    margin: 3% 0% 0% 0%;
+    width: auto;
+    height: 500px;
+    align-items: flex-start;
+  }
+  .nft_details {
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nft-image{
+    height: 350px;
+    width: 550px;
+    margin: 0% 0% 8% 10%;
+    align-items: flex-end;
+    border-radius: 15px;
+  }
+  .nft-audio{
+    margin: 70% 0% 0% 10%;
+  }
+}
+
+
+@media only screen and (max-width: 938px) {
+  .nftdetails-container{
+    margin: 3% 0% 0% 0%;
+    width: auto;
+    height: 500px;
+    align-items: flex-start;
+  }
+  .nft_details {
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nft-image{
+    height: 350px;
+    width: 550px;
+    margin: 0% 0% 8% 10%;
+    align-items: flex-end;
+    border-radius: 15px;
+  }
+  .nft-audio{
+    margin: 15% 0% 15% 40%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .nftdetails-container {
+    margin: 5% 0% 0% -10%;
+    width: 100%;
+    align-items: flex-start;
+  }
+  .nft_details {
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nft-image {
+    height: 350px;
+    width: 400px;
+    margin: 0;
+    border-radius: 15px;
+  }
+  .nft-audio{
+    margin: 10% 0% 10% 12%;
+  }
+}
+
+
+
+@media only screen and (max-width: 480px) {
+  Button {
+    font-size: 8px;
+  }
+}
+
+
+/* Popup.css */
+.popup {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.popup-content {
+  background-color: black;
+  padding: 0% 0% 0% 0%;
+  width: 100%;
+  border: 20px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.close-popup {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+.createcol-container{
+  margin: 5% 5% 5% 5%;
+}
