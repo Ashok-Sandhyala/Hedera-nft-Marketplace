@@ -132,7 +132,6 @@ export default function Register() {
     } catch (error) {
       console.error('Error creating Hedera account:', error);
     }
-
   }
 
   return (

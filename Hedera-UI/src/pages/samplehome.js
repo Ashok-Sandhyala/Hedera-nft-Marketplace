@@ -30,17 +30,26 @@ function Home() {
   const [tokenid, settokenid] = useState([]);
   const [nftcid, setnftcid] = useState([]);
   const [creatorid, setcreatorid] = useState([]);
+  const [mediatype, setmediatype] = useState([]);
+  const [metadata , setmetadata] = useState([]);
   const [rmv, srmv] = useState([])
   const [newAccountId, setNewAccountId] = useState(null);
   const [adata, sadata] = useState();
+  const [hederaid ,sHederaid] = useState('');
+  const [ownerid,sownerid] = useState('');
+  const [privatekey , sprivatekey ] = useState('');
+  const [wid ,swid] = useState('');
 
-
+  sessionStorage.Hederaid = hederaid;
   const nav = useNavigate()
-
+  const gid = '0.0.3629552'
+  console.log('gid : '+gid);
+  
   const openPopup = (colname, Accountid, coldes, nft) => {
     document.getElementById("editnft");
     setShowPopup(true);
     setid(Accountid)
+    swid(Accountid)
     setcollname(colname)
     setcoldes(coldes)
     setnftref(nft.NFT_ref)
@@ -52,16 +61,20 @@ function Home() {
     setpltformcharge(nft.PlatformCharge)
     settokenid(nft.TokenId)
     setnftcid(nft.NFT_cid)
+    setmediatype(nft.NFT_Type)
+    setmetadata(nft.Metadata_CID)
     setcreatorid(nft.CreaterId)
+    sownerid(nft.OwnerId)
   };
 
   const closePopup = () => {
     setShowPopup(false);
   };
 
+
   const Deletenft = async (id, collname, nftref) => {
     try {
-      const response = await axios.delete(`https://hederanft-server.onrender.com/deletenft/${id}/${collname}/${nftref}`);
+      const response = await axios.delete(`http://localhost:9000/deletenft/${id}/${collname}/${nftref}`);
       if (response.data.message === "NFT deleted successfully") {
         alert(`NFT Deleted with NFT_REF: ${nftref}`);
         window.location.reload(false);
@@ -71,54 +84,67 @@ function Home() {
     }
   };
 
+  
   const Buynft = async () => {
-    console.log("aid")
-      console.log("price")
     try {
-      
+
       const royalityid = await walletInterface.transferHBAR(creatorid, royality);
       console.log('Royality Transaction id :', royalityid);
-      const platformchargeid = await walletInterface.transferHBAR('0.0.815067', pltformcharge);
-      console.log('platform charge transaction ID is :', platformchargeid)
-      const txId = await walletInterface.transferHBAR(aid, price);
-      console.log("Transaction ID:", txId);
+      // const platformchargeid = await walletInterface.transferHBAR('0.0.815067', pltformcharge);
+      // console.log('platform charge transaction ID is :', platformchargeid)
+      // const txId = await walletInterface.transferHBAR(ownerid, price);
+      // console.log("Transaction ID:", txId);
 
+      console.log('start');
+      const response = await axios.post("http://localhost:9000/buyingnft", {
+        Email: sessionStorage.email,
+        Hid: sessionStorage.hederaid,
+        aid: sessionStorage.accid,
+        colname: collname,
+        coldes: coldes,
+        tokenId: tokenid.toString(),
+        nft: nftname,
+        nft_ref: nftref,
+        nftsymbol: nftsymbol,
+        nftdes: nftdes,
+        price: price,
+        royality: royality,
+        pltformcharge: pltformcharge,
+        selectedMediaType: mediatype,
+        ipfsHash: nftcid,
+        Metadatahash: metadata,
+        creatorId : creatorid,
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
       
-      if (txId && royalityid && platformchargeid) {
-        console.log("HBAR transaction successful. Proceeding with NFT purchase and deletion.");
-        const postRequest = axios.post("https://hederanft-server.onrender.com/transferednft", {
-          aid: sessionStorage.Hederaid,
-          email : sessionStorage.email,
-          hederaid : sessionStorage.HederaId,
-          colname: collname,
-          coldes: coldes,
-          tokenId: tokenid,
-          nft: nftname,
-          nft_ref: nftref,
-          nftsymbol: nftsymbol,
-          nftdes: nftdes,
-          price: price,
-          royality: royality,
-          pltformcharge: pltformcharge,
-          ipfsHash: nftcid,
-          creatorid: creatorid
-        });
-        console.log('data enter success');
-        const deleteRequest = Deletenft(sessionStorage.accid, collname, nftref);
-        const [postResponse, deleteResponse] = await Promise.all([postRequest, deleteRequest]);
+      const deleteRequest = Deletenft(gid, collname, tokenid);
 
-        if (postResponse.data) {
+        if (deleteRequest) {
           alert('NFT bought with tokenID ' + `${tokenid}`);
           console.log("NFT purchase successful.");
           window.location.reload(false);
         }
+
+      console.log("center");
+      console.log(response.data);
+      if (response.data) {
+        alert('NFT Buying Success ' + `${tokenid}`);
+        
+
+        window.location.reload(false);
+      } else {
+        alert('Failed to buy NFT');
       }
     } catch (error) {
-      alert(' buying the NFT not possible.');
+      console.error('Error Buying NFT:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-
 
 
   useEffect(() => {
@@ -126,6 +152,7 @@ function Home() {
       .get("https://hederanft-server.onrender.com/viewpublishednfts")
       .then((response) => {
         setPublishedNFTs(response.data);
+        
       })
       .catch((error) => {
         console.log(error);
@@ -141,13 +168,26 @@ function Home() {
         console.log(dm)
         sessionStorage.hederaid = dm[0].HederaId
         sessionStorage.PrivateKey = dm[0].HederaPrivatekey
-        console.log("hid" + sessionStorage.hederaid)
-        console.log("hpy" + sessionStorage.PrivateKey)
+        // console.log("hid" + sessionStorage.hederaid)
+        // console.log(sessionStorage.accid)
+        // console.log("hpy" + sessionStorage.PrivateKey)
       })
       .catch((err) => {
         console.log(err);
       });
   }, [3]);
+
+  // useEffect(() => {
+  //   axios.get("https://hederanft-server.onrender.com/collectiondetails/" + sessionStorage.email)
+  //     .then((responce) => {
+  //       sHederaid(responce.data.HederaId);
+  //       sprivatekey(responce.data.HederaPrivatekey);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
 
   return (
     <>
@@ -195,13 +235,17 @@ function Home() {
                             sx={{ m: "2% 0% 0% 5%", background: "green" }} > BUY </Button>
                         </Link>
                       }
+                      
                     </div>
                   )
                 }
-
+ 
+ 
               </div>
+              
             ))
           ))}
+          
         </div>
 
 
@@ -251,6 +295,7 @@ function Home() {
                   <Button variant='contained' sx={{ m: "0% 0% 0% 0%", background: "yellowgreen" }} disabled={isLoading} onClick={Buynft}>
                     {isLoading ? 'Buying NFT...' : 'Buy NFT'}
                   </Button>
+                  <button onClick={Deletenft(id, collname, tokenid)}>Delete</button>
 
                 </form>
               </div>

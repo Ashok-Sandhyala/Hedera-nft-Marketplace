@@ -71,9 +71,10 @@ function Home() {
     setShowPopup(false);
   };
 
+
   const Deletenft = async (id, collname, nftref) => {
     try {
-      const response = await axios.delete(`https://hederanft-server.onrender.com/deletenft/${id}/${collname}/${nftref}`);
+      const response = await axios.delete(`http://localhost:9000/deletenft/${id}/${collname}/${nftref}`);
       if (response.data.message === "NFT deleted successfully") {
         alert(`NFT Deleted with NFT_REF: ${nftref}`);
         window.location.reload(false);
@@ -83,6 +84,7 @@ function Home() {
     }
   };
 
+  
   const Buynft = async () => {
     try {
 
@@ -97,7 +99,7 @@ function Home() {
       const response = await axios.post("http://localhost:9000/buyingnft", {
         Email: sessionStorage.email,
         Hid: sessionStorage.hederaid,
-        aid: sessionStorage.walletid,
+        aid: sessionStorage.accid,
         colname: collname,
         coldes: coldes,
         tokenId: tokenid.toString(),
@@ -119,7 +121,7 @@ function Home() {
       });
   
       
-      const deleteRequest = Deletenft(gid, collname, nftref);
+      const deleteRequest = Deletenft(gid, collname, tokenid);
 
         if (deleteRequest) {
           alert('NFT bought with tokenID ' + `${tokenid}`);
@@ -227,19 +229,23 @@ function Home() {
                       <Link to={`/nftdetails/${collection.accounid}/${collection.colname}/${nft.NFT_ref}`}><Button variant='contained' sx={{ m: "2% 0% 0% 5%" }}>VIEW</Button></Link>
 
                       {
-                        collection.accounid === sessionStorage.walletid ? <b /> : <Link>
+                        collection.accounid === sessionStorage.accid ? <b /> : <Link>
                           <Button onClick={() => { openPopup(collection.colname, collection.accounid, collection.coldes, nft); }}
                             variant="contained"
                             sx={{ m: "2% 0% 0% 5%", background: "green" }} > BUY </Button>
                         </Link>
                       }
+                      
                     </div>
                   )
                 }
-
+ 
+ 
               </div>
+              
             ))
           ))}
+          
         </div>
 
 
@@ -289,6 +295,7 @@ function Home() {
                   <Button variant='contained' sx={{ m: "0% 0% 0% 0%", background: "yellowgreen" }} disabled={isLoading} onClick={Buynft}>
                     {isLoading ? 'Buying NFT...' : 'Buy NFT'}
                   </Button>
+                  <button onClick={Deletenft(id, collname, tokenid)}>Delete</button>
 
                 </form>
               </div>

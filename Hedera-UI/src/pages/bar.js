@@ -17,7 +17,7 @@ import { useWalletInterface } from '../services/wallets/useWalletInterface';
 import { useEffect } from 'react';
 import { useState } from 'react';
 const pages = ['Collection', 'NFT', 'Dashboard'];
-const settings = ['Mail : ' + sessionStorage.email, 'Account ID : ' + sessionStorage.Hederaid, 'Profile', 'Logout'];
+const settings = ['Mail : ' + sessionStorage.email, 'Account ID : ' + sessionStorage.accid, 'Profile', 'Logout'];
 
 const ResponsiveAppBar = () => {
   const navigate = useNavigate();

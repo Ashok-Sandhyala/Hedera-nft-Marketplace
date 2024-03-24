@@ -50,7 +50,7 @@ export default function SignInSide() {
 
   sessionStorage.email = email;
   sessionStorage.gmail = email;
-  sessionStorage.Hederaid = accountId;
+  sessionStorage.walletid = accountId;
   sessionStorage.accid = accountId;
 
   const handleShowConfirmPassword = () => {
