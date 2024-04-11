@@ -31,7 +31,6 @@ import { WalletSelectionDialog } from "../components/WalletSelectionDialog";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { ButtonGroup } from "@mui/material";
-import ResponsiveAppBar from "./bar";
 
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -75,11 +74,10 @@ function Nft() {
   const [metadata, setmetadata] = useState('')
 
 
-  const operatorAccountId = AccountId.fromString('0.0.2954252');
-  const operatorPrivateKey = PrivateKey.fromString('302e020100300506032b6570042204202288f5cbd35ef35adcc9a97769a12addc21d5d3ea1f3f5f48ba0fef8b6c6b0d1');
-  const treasuryAccId = AccountId.fromString('0.0.3566713');
-  const treasuryAccPvKey = PrivateKey.fromString('302e020100300506032b6570042204204c00202824081e89f23b6cab53d329dd8589598c60d48e360c198552e149da11');
-
+  const operatorAccountId = AccountId.fromString(sessionStorage.operatorid);
+  const operatorPrivateKey = PrivateKey.fromString(sessionStorage.operatorprivatekey);
+  const treasuryAccId = AccountId.fromString(sessionStorage.hederaid);
+  const treasuryAccPvKey = PrivateKey.fromString(sessionStorage.PrivateKey);
 
   const wipeKey = PrivateKey.generate();
   const pauseKey = PrivateKey.generate();
@@ -127,19 +125,22 @@ function Nft() {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            pinata_api_key: process.env.REACT_APP_ipfs_api_key,
-            pinata_secret_api_key: process.env.REACT_APP_ipfs_secret_api_key,
+            pinata_api_key: sessionStorage.pinata_api_key,
+            pinata_secret_api_key: sessionStorage.pinata_secret_api_key,
           },
         }
       );
 
       const ipfsHash = ipfsResponse.data.IpfsHash;
 
+
+
+
       const metadata = {
         name: nft,
         symbol: nftsymbol,
         description: nftdes,
-        Tokenid: tokenId.toString(),
+        Tokenid: tokenId,
         external_url: 'https://pinata.cloud',
         Image: `ipfs://${ipfsHash}`,
       };
@@ -147,14 +148,14 @@ function Nft() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          pinata_api_key: process.env.REACT_APP_ipfs_api_key,
-          pinata_secret_api_key: process.env.REACT_APP_ipfs_secret_api_key,
+          pinata_api_key: sessionStorage.pinata_api_key,
+          pinata_secret_api_key: sessionStorage.pinata_secret_api_key,
         },
         body: JSON.stringify(metadata),
       });
       const metadataHash = (await res.json()).IpfsHash;
       console.log('Metadata uploaded. MetadataCID:', metadataHash);
-      setmetadata(metadataHash.toString())
+      setmetadata(metadataHash)
       //Minting NFT
       const maxTransactionFee = new Hbar(20);
       const CID = [Buffer.from(`ipfs://${metadata}/metadata.json`),]
@@ -170,8 +171,6 @@ function Nft() {
 
 
       const response = await axios.post("http://localhost:9000/createnft", {
-        Email : sessionStorage.email,
-        Hid : sessionStorage.Hederaid,
         aid: aid,
         colname: colname,
         coldes: coldes,
@@ -181,8 +180,8 @@ function Nft() {
         nftsymbol: nftsymbol,
         nftdes: nftdes,
         price: price,
-        royality: royaltyAmount,
-        pltformcharge: platformChargeAmount,
+        royality: royality,
+        pltformcharge: pltformcharge,
         selectedMediaType: selectedMediaType,
         ipfsHash: ipfsHash,
         Metadatahash: metadata,
@@ -210,6 +209,9 @@ function Nft() {
     document.getElementById("second").style.display = "block";
   }
 
+
+
+
   const calculatePercentageAmount = (percentage, targetStateSetter) => {
     const priceValue = parseFloat(price) || 0;
     const percentageValue = parseFloat(percentage) || 0;
@@ -226,7 +228,7 @@ function Nft() {
 
 
   useEffect(() => {
-    axios.get("https://hederanft-server.onrender.com/accountdetails/" + sessionStorage.email)
+    axios.get("http://localhost:9000/accountdetails/" + sessionStorage.email)
       .then((responce) => {
         sadata(responce.data);
         const dm = responce.data;
@@ -236,10 +238,6 @@ function Nft() {
         sessionStorage.PrivateKey = dm[0].HederaPrivatekey
         console.log("hid" + sessionStorage.hederaid)
         console.log("hpy" + sessionStorage.PrivateKey)
-        console.log(process.env.REACT_APP_operator_id)
-        console.log(process.env.REACT_APP_operator_key)
-        console.log(process.env.REACT_APP_ipfs_api_key)
-        console.log(process.env.REACT_APP_ipfs_secret_api_key)
       })
       .catch((err) => {
         console.log(err);
@@ -248,7 +246,6 @@ function Nft() {
 
   return (
     <>
-    <ResponsiveAppBar/>
       <ThemeProvider theme={darkTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />

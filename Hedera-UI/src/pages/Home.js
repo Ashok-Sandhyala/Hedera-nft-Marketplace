@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import NavBar from "../components/Navbar";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 import { useWalletInterface } from "../services/wallets/useWalletInterface";
+import { Button, TextField, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import environmentSetup from '../pages/create-hedera-account'
 import Register from "./register";
 import ResponsiveAppBar from "./bar";
@@ -42,8 +44,7 @@ function Home() {
 
   sessionStorage.Hederaid = hederaid;
   const nav = useNavigate()
-  const gid = '0.0.3629552'
-  console.log('gid : '+gid);
+  
   
   const openPopup = (colname, Accountid, coldes, nft) => {
     document.getElementById("editnft");
@@ -71,74 +72,76 @@ function Home() {
     setShowPopup(false);
   };
 
+  console.log("ganeshsreeja :"+wid);
 
-  const Deletenft = async (id, collname, nftref) => {
-    try {
-      const response = await axios.delete(`http://localhost:9000/deletenft/${id}/${collname}/${nftref}`);
-      if (response.data.message === "NFT deleted successfully") {
-        alert(`NFT Deleted with NFT_REF: ${nftref}`);
-        window.location.reload(false);
-      }
-    } catch (error) {
-      alert("An error occurred while deleting the NFT.");
-    }
-  };
+  const Deletenft = (id,collname ,TokenId) => {
+    axios.delete(`https://hederanft-server.onrender.com/deletenft/${id}/${collname}/${TokenId}`)
+      .then((responce) => {
+        alert('NFT deleted with NFT_ref : ${TokenId}');
+        nav('/viewnft');
+      })
+      .catch((error) => {
+        alert('NFT not Possible to delete ');
+      });
+  }
 
-  
+  console.log(id);
+  console.log(collname);
+  console.log(tokenid);
   const Buynft = async () => {
     try {
 
-      const royalityid = await walletInterface.transferHBAR(creatorid, royality);
-      console.log('Royality Transaction id :', royalityid);
+      // const royalityid = await walletInterface.transferHBAR(creatorid, royality);
+      // console.log('Royality Transaction id :', royalityid);
       // const platformchargeid = await walletInterface.transferHBAR('0.0.815067', pltformcharge);
       // console.log('platform charge transaction ID is :', platformchargeid)
       // const txId = await walletInterface.transferHBAR(ownerid, price);
       // console.log("Transaction ID:", txId);
 
       console.log('start');
-      const response = await axios.post("http://localhost:9000/buyingnft", {
-        Email: sessionStorage.email,
-        Hid: sessionStorage.hederaid,
-        aid: sessionStorage.accid,
-        colname: collname,
-        coldes: coldes,
-        tokenId: tokenid.toString(),
-        nft: nftname,
-        nft_ref: nftref,
-        nftsymbol: nftsymbol,
-        nftdes: nftdes,
-        price: price,
-        royality: royality,
-        pltformcharge: pltformcharge,
-        selectedMediaType: mediatype,
-        ipfsHash: nftcid,
-        Metadatahash: metadata,
-        creatorId : creatorid,
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-  
-      
-      const deleteRequest = Deletenft(gid, collname, tokenid);
+      // const response = await axios.post("http://localhost:9000/buyingnft", {
+      //   Email: sessionStorage.email,
+      //   Hid: sessionStorage.hederaid,
+      //   aid: sessionStorage.accid,
+      //   colname: collname,
+      //   coldes: coldes,
+      //   tokenId: tokenid.toString(),
+      //   nft: nftname,
+      //   nft_ref: nftref,
+      //   nftsymbol: nftsymbol,
+      //   nftdes: nftdes,
+      //   price: price,
+      //   royality: royality,
+      //   pltformcharge: pltformcharge,
+      //   selectedMediaType: mediatype,
+      //   ipfsHash: nftcid,
+      //   Metadatahash: metadata,
+      //   creatorId : creatorid,
+      // }, {
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // });
+ 
+    
+        const deleteRequest = Deletenft(id, collname, tokenid);
 
         if (deleteRequest) {
           alert('NFT bought with tokenID ' + `${tokenid}`);
           console.log("NFT purchase successful.");
-          window.location.reload(false);
+          // window.location.reload(false);
         }
+      
+      
 
       console.log("center");
       console.log(response.data);
-      if (response.data) {
-        alert('NFT Buying Success ' + `${tokenid}`);
-        
-
-        window.location.reload(false);
-      } else {
-        alert('Failed to buy NFT');
-      }
+      // if (response.data) {
+      //   alert('NFT Buying Success ' + `${tokenid}`);
+      //   window.location.reload(false);
+      // } else {
+      //   alert('Failed to buy NFT');
+      // }
     } catch (error) {
       console.error('Error Buying NFT:', error);
     } finally {
@@ -250,58 +253,91 @@ function Home() {
 
 
         {showPopup && (
-          <div className="popup">
-            <div className="popup-content">
-              <span className="close-popup" onClick={closePopup}>
-                &times;<Button variant='contained' sx={{ m: "0% 0% 0% 0%", background: "red" }} >Close</Button>
-              </span>
-              
-
-              <div className="createcol-container" id="editnft">
-                <h2>BUY Nft</h2>
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <label>Account id : </label>
-                  <input type="text" name="id" value={sessionStorage.accid} />
-                  <br />
-                  <br />
-                  <label>Collection Name : </label>
-                  <input type="text" name="colname" defaultValue={collname} onChange={(e) => setcollname(e.target.value)} />
-                  <br />
-                  <br />
-                  <label> NFT-Token Name : </label>
-                  <input type="text" defaultValue={nftname} name="nftname" onChange={(e) => setnftname(e.target.value)} />
-                  <br />
-                  <br />
-                  <label >NFT-Token Symbol : </label>
-                  <input type="text" defaultValue={nftsymbol} name="nftsymbol" pattern="[A-Z]3" onChange={(e) => setnftsymbol(e.target.value)} />
-                  <br />
-                  <br />
-                  <label>NFT-Token Description : </label>
-                  <input type="text" defaultValue={nftdes} name="nftdes" onChange={(e) => setnftdes(e.target.value)} />
-                  <br />
-                  <br />
-                  <label>NFT-Token Price : </label>
-                  <input type="number" defaultValue={price} onChange={(e) => setprice(e.target.value)} />
-                  <br />
-                  <br />
-                  <label> NFT-Token Royalty :</label>
-                  <input type="number" defaultValue={royality} onChange={(e) => setroyality(e.target.value)} />
-                  <br />
-                  <br />
-                  <label> NFT Platform Price :</label>
-                  <input type="number" defaultValue={pltformcharge} onChange={(e) => setpltformcharge(e.target.value)} />
-                  <br />
-                  <br />
-                  <Button variant='contained' sx={{ m: "0% 0% 0% 0%", background: "yellowgreen" }} disabled={isLoading} onClick={Buynft}>
-                    {isLoading ? 'Buying NFT...' : 'Buy NFT'}
-                  </Button>
-                  <button onClick={Deletenft(id, collname, tokenid)}>Delete</button>
-
-                </form>
-              </div>
-            </div>
-          </div>
-        )}
+        <Dialog open={showPopup} onClose={closePopup}>
+          <DialogTitle>
+            BUY Nft
+            <IconButton aria-label="close" onClick={closePopup}>
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent>
+            <form >
+               <TextField
+                label="Account Id"
+                variant="outlined"
+                name="Account Id"
+                value={wid}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Collection Name"
+                variant="outlined"
+                name="customNftname"
+                value={collname}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Name"
+                variant="outlined"
+                name="customNftsymbol"
+                value={nftname}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Symbol"
+                variant="outlined"
+                name="customNftdes"
+                value={nftsymbol}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Description"
+                variant="outlined"
+                name="customNftdes"
+                value={nftdes}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Price"
+                variant="outlined"
+                type="number"
+                name="customPrice"
+                value={price}
+                
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Royalty"
+                variant="outlined"
+                type="number"
+                name="customRoyality"
+                value={royality}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT Platform Price"
+                variant="outlined"
+                type="number"
+                name="customPltformcharge"
+                value={pltformcharge}
+                
+                fullWidth
+                margin="normal"
+              />
+              <Button variant='contained' color="primary" disabled={isLoading} onClick={Buynft} fullWidth>
+                {isLoading ? 'Buying NFT...' : 'Buy NFT'}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
+      )}
 
       </div>
     </>

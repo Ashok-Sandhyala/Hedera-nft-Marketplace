@@ -76,10 +76,10 @@ function Nftdetails() {
   };
 
   /*************************************deleteNFT*************************************************************/
-  const Deletenft = (nft_ref) => {
-    axios.delete(`https://hederanft-server.onrender.com/deletenft/${aid}/${colname}/${nft_ref}`)
+  const Deletenft = (TokenId) => {
+    axios.delete(`https://hederanft-server.onrender.com/deletenft/${aid}/${colname}/${TokenId}`)
       .then((responce) => {
-        alert('NFT deleted with NFT_ref : ${nft_ref}');
+        alert('NFT deleted with NFT_ref : ${TokenId}');
         nav('/viewnft');
       })
       .catch((error) => {
@@ -146,7 +146,7 @@ function Nftdetails() {
                 aid == sessionStorage.accid ? <Button onClick={openPopup} onClickCapture={(e) => srmv(nft)} variant='contained' sx={{ ml: "1%", background: "violet" }} >update</Button> : <b />
               }
               {
-                aid == sessionStorage.accid ? <Button onClick={() => Deletenft(nft.NFT_ref)} variant='contained' sx={{ ml: "1% ", background: "red" }} >Delete</Button> : <b />
+                aid == sessionStorage.accid ? <Button onClick={() => Deletenft(nft.TokenId)} variant='contained' sx={{ ml: "1% ", background: "red" }} >Delete</Button> : <b />
               }
               {
                 aid == sessionStorage.accid ? <b /> : <Button variant='contained' sx={{ ml: "0%", background: "green" }}>BUY</Button>
