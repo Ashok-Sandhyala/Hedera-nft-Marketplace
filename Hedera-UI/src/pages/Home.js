@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import NavBar from "../components/Navbar";
-// import { Button } from "@mui/material";
 import { useWalletInterface } from "../services/wallets/useWalletInterface";
 import { Button, TextField, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import environmentSetup from '../pages/create-hedera-account'
-import Register from "./register";
+
 import ResponsiveAppBar from "./bar";
 import {transferHBAR} from '@hashgraph/sdk';
 import { AccountId } from "@hashgraph/sdk";
@@ -41,6 +39,8 @@ function Home() {
   const [ownerid,sownerid] = useState('');
   const [privatekey , sprivatekey ] = useState('');
   const [wid ,swid] = useState('');
+  const [royaltyAmount, setRoyaltyAmount] = useState(0);
+  const [platformChargeAmount, setPlatformChargeAmount] = useState(0);
 
   sessionStorage.Hederaid = hederaid;
   const nav = useNavigate()
@@ -73,9 +73,11 @@ function Home() {
   };
 
   console.log("ganeshsreeja :"+wid);
+  console.log("royality amount"+royaltyAmount);
+  console.log("Platform charge"+platformChargeAmount);
 
   const Deletenft = (id,collname ,TokenId) => {
-    axios.delete(`https://hederanft-server.onrender.com/deletenft/${id}/${collname}/${TokenId}`)
+    axios.delete(`http://localhost:9000/deletenft/${id}/${collname}/${TokenId}`)
       .then((responce) => {
         alert('NFT deleted with NFT_ref : ${TokenId}');
         nav('/viewnft');
@@ -91,37 +93,37 @@ function Home() {
   const Buynft = async () => {
     try {
 
-      // const royalityid = await walletInterface.transferHBAR(creatorid, royality);
-      // console.log('Royality Transaction id :', royalityid);
-      // const platformchargeid = await walletInterface.transferHBAR('0.0.815067', pltformcharge);
-      // console.log('platform charge transaction ID is :', platformchargeid)
-      // const txId = await walletInterface.transferHBAR(ownerid, price);
-      // console.log("Transaction ID:", txId);
+      const royalityid = await walletInterface.transferHBAR(creatorid, royaltyAmount);
+      console.log('Royality Transaction id :', royalityid);
+      const platformchargeid = await walletInterface.transferHBAR('0.0.815067', platformChargeAmount);
+      console.log('platform charge transaction ID is :', platformchargeid)
+      const txId = await walletInterface.transferHBAR(ownerid, price);
+      console.log("Transaction ID:", txId);
 
       console.log('start');
-      // const response = await axios.post("http://localhost:9000/buyingnft", {
-      //   Email: sessionStorage.email,
-      //   Hid: sessionStorage.hederaid,
-      //   aid: sessionStorage.accid,
-      //   colname: collname,
-      //   coldes: coldes,
-      //   tokenId: tokenid.toString(),
-      //   nft: nftname,
-      //   nft_ref: nftref,
-      //   nftsymbol: nftsymbol,
-      //   nftdes: nftdes,
-      //   price: price,
-      //   royality: royality,
-      //   pltformcharge: pltformcharge,
-      //   selectedMediaType: mediatype,
-      //   ipfsHash: nftcid,
-      //   Metadatahash: metadata,
-      //   creatorId : creatorid,
-      // }, {
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   }
-      // });
+      const response = await axios.post("http://localhost:9000/buyingnft", {
+        Email: sessionStorage.email,
+        Hid: sessionStorage.hederaid,
+        aid: sessionStorage.accid,
+        colname: collname,
+        coldes: coldes,
+        tokenId: tokenid.toString(),
+        nft: nftname,
+        nft_ref: nftref,
+        nftsymbol: nftsymbol,
+        nftdes: nftdes,
+        price: price,
+        royality: royality,
+        pltformcharge: pltformcharge,
+        selectedMediaType: mediatype,
+        ipfsHash: nftcid,
+        Metadatahash: metadata,
+        creatorId : creatorid,
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
  
     
         const deleteRequest = Deletenft(id, collname, tokenid);
@@ -129,19 +131,19 @@ function Home() {
         if (deleteRequest) {
           alert('NFT bought with tokenID ' + `${tokenid}`);
           console.log("NFT purchase successful.");
-          // window.location.reload(false);
+          window.location.reload(false);
         }
       
       
 
       console.log("center");
       console.log(response.data);
-      // if (response.data) {
-      //   alert('NFT Buying Success ' + `${tokenid}`);
-      //   window.location.reload(false);
-      // } else {
-      //   alert('Failed to buy NFT');
-      // }
+      if (response.data) {
+        alert('NFT Buying Success ' + `${tokenid}`);
+        window.location.reload(false);
+      } else {
+        alert('Failed to buy NFT');
+      }
     } catch (error) {
       console.error('Error Buying NFT:', error);
     } finally {
@@ -152,7 +154,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("https://hederanft-server.onrender.com/viewpublishednfts")
+      .get("http://localhost:9000/viewpublishednfts")
       .then((response) => {
         setPublishedNFTs(response.data);
         
@@ -163,7 +165,7 @@ function Home() {
   }, []);
   
   useEffect(() => {
-    axios.get("https://hederanft-server.onrender.com/accountdetails/" + sessionStorage.email)
+    axios.get("http://localhost:9000/accountdetails/" + sessionStorage.email)
       .then((responce) => {
         sadata(responce.data);
         const dm = responce.data;
@@ -181,7 +183,7 @@ function Home() {
   }, [3]);
 
   // useEffect(() => {
-  //   axios.get("https://hederanft-server.onrender.com/collectiondetails/" + sessionStorage.email)
+  //   axios.get("http://localhost:9000/collectiondetails/" + sessionStorage.email)
   //     .then((responce) => {
   //       sHederaid(responce.data.HederaId);
   //       sprivatekey(responce.data.HederaPrivatekey);
@@ -190,6 +192,22 @@ function Home() {
   //       console.log(err);
   //     });
   // }, []);
+
+
+  const calculatePercentageAmount = (percentage, targetStateSetter) => {
+    const priceValue = parseFloat(price) || 0;
+    const percentageValue = parseFloat(percentage) || 0;
+    const calculatedAmount = (priceValue * percentageValue) / 100;
+    targetStateSetter(calculatedAmount.toFixed(5)); // Limiting to 5 decimal places
+  };
+
+  useEffect(() => {
+    calculatePercentageAmount(royality, setRoyaltyAmount);
+  }, [royality, price]);
+  useEffect(() => {
+    calculatePercentageAmount(pltformcharge, setPlatformChargeAmount);
+  }, [pltformcharge, price]);
+
 
 
   return (

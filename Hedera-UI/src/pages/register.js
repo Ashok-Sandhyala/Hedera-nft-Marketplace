@@ -58,7 +58,7 @@ export default function Register() {
 
   const handleValidate = async (event) => {
     event.preventDefault();
-    const checkEmailResponse = await axios.get("https://hederanft-server.onrender.com/check-email/" + email);
+    const checkEmailResponse = await axios.get("http://localhost:9000/check-email/" + email);
     if (!email) {
       alert('Please enter an email address before sending otp.');
       return;
@@ -109,7 +109,7 @@ export default function Register() {
       const { newAccountId, newAccountPrivateKey } = await environmentSetup();
       console.log('New Generated Account ID:', newAccountId);
       console.log('New generated Private key :', newAccountPrivateKey)
-      const response = await axios.post("https://hederanft-server.onrender.com/registration/" + email + "/" + confirmPassword + "/" + newAccountId + "/" + newAccountPrivateKey);
+      const response = await axios.post("http://localhost:9000/registration/" + email + "/" + confirmPassword + "/" + newAccountId + "/" + newAccountPrivateKey);
       console.log(response.data);
       if (response.data) {
         alert('Registration was Successful');
@@ -123,11 +123,11 @@ export default function Register() {
         };
 
         try {
-          await window.Email.send(emailConfig).then(() => alert("Email sent successfully"));
+          await window.Email.send(emailConfig).then(() => console.log("Email sent successfully"));
         } catch (emailError) {
           console.error('Error sending registration email:', emailError);
         }
-        nav('/');
+        nav('/login');
       }
     } catch (error) {
       console.error('Error creating Hedera account:', error);

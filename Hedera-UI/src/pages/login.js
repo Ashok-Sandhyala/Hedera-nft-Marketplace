@@ -73,7 +73,7 @@ export default function SignInSide() {
       alert("please fill all the required fields");
     }
     try {
-      const response = await axios.get(`https://hederanft-server.onrender.com/login/${email}/${confirmPassword}`);
+      const response = await axios.get(`http://localhost:9000/login/${email}/${confirmPassword}`);
       console.log(response.data);
       if (response.data) {
         alert('Login was Successful');
@@ -88,7 +88,7 @@ export default function SignInSide() {
   };
 
   useEffect(() => {
-    axios.get("https://hederanft-server.onrender.com/ipfsapi/")
+    axios.get("http://localhost:9000/ipfsapi/")
       .then((responce) => {
         setdata(responce.data);
         sessionStorage.pinata_api_key = responce.data.ipfs_api_key;
@@ -102,7 +102,7 @@ export default function SignInSide() {
   }, []);
 
   useEffect(() => {
-    axios.get("https://hederanft-server.onrender.com/collectiondetails/" + sessionStorage.email)
+    axios.get("http://localhost:9000/collectiondetails/" + sessionStorage.email)
       .then((responce) => {
         sHederaid(responce.data.HederaId);
       })

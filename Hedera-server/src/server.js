@@ -79,10 +79,10 @@ app.get('/collectiondetails/:email',async(req,res)=>{
   res.json(details)
 })
 
-app.get('/collections/:email/:walletid',async(req,res)=>{
+app.get('/collections/:email',async(req,res)=>{
   const {email} = req.params;
-  const {walletid} = req.params;
-  const details = await db.collection('NFT_Details').find({Email : email , Accountid : walletid}).toArray()
+  // const {walletid} = req.params;
+  const details = await db.collection('NFT_Details').find({Email : email}).toArray()
   res.json(details)
 })
 

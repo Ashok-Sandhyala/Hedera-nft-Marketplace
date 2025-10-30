@@ -26,7 +26,7 @@ function Main() {
     };
 
     useEffect(() => {
-        axios.get(`https://hederanft-server.onrender.com/collections/${ sessionStorage.email}`)
+        axios.get(`http://localhost:9000/collections/${ sessionStorage.email}`)
             .then((response) => {
                 setdata(response.data);
                 setLoading(false);

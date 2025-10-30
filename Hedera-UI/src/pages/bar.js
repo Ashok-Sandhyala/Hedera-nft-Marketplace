@@ -86,7 +86,7 @@ const ResponsiveAppBar = () => {
       sessionStorage.removeItem('gmail');
       sessionStorage.removeItem('accid');
       sessionStorage.removeItem('Hederaid');
-      navigate('/home');
+      navigate('/');
     }
     
     handleCloseUserMenu();

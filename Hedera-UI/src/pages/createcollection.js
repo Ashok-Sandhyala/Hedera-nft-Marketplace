@@ -35,7 +35,7 @@ function Collection() {
       return;
     }
     try {
-      const response = await axios.post("https://hederanft-server.onrender.com/create/" + accountId +"/"+ sessionStorage.email + "/" + data + "/" + colname + "/" + coldes);
+      const response = await axios.post("http://localhost:9000/create/" + accountId +"/"+ sessionStorage.email + "/" + data + "/" + colname + "/" + coldes);
       console.log(response.data);
       if (response.data) {
         alert('Collection created');
@@ -47,7 +47,7 @@ function Collection() {
   }
 
   useEffect(() => {
-    axios.get("https://hederanft-server.onrender.com/collectiondetails/" + sessionStorage.email)
+    axios.get("http://localhost:9000/collectiondetails/" + sessionStorage.email)
       .then((responce) => {
         setdata(responce.data.HederaId);
       })

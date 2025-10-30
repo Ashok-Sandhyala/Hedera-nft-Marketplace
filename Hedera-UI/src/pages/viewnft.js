@@ -15,7 +15,7 @@ function Viewnft() {
   // const id = sessionStorage.accountid;
   useEffect(() => {
     axios
-      .get("https://hederanft-server.onrender.com/viewnft/" + aid + "/" + colname)
+      .get("http://localhost:9000/viewnft/" + aid + "/" + colname)
       .then((response) => {
         setNftDetails(response.data);
       })
@@ -26,7 +26,7 @@ function Viewnft() {
 
   const Deletenft = async (TokenId) => {
     try {
-      const response = await axios.delete(`https://hederanft-server.onrender.com/deletenft/${aid}/${colname}/${TokenId}`);
+      const response = await axios.delete(`http://localhost:9000/deletenft/${aid}/${colname}/${TokenId}`);
       if (response.data.message === "NFT deleted successfully") {
         alert(`NFT Deleted with NFT_REF: ${TokenId}`);
         window.location.reload(false);
@@ -40,14 +40,16 @@ function Viewnft() {
     }
   };
   
-
+  
   const updatePublicStatus = async (nftRef, isPublic) => {
     try {
-      await axios.put(`https://hederanft-server.onrender.com/updatePublicStatus/${aid}/${nftRef}`, { isPublic });
+      await axios.put(`http://localhost:9000/updatePublicStatus/${aid}/${nftRef}`, { isPublic });
       if (isPublic) {
         alert('NFT is now public successfully!');
+        window.location.reload(false);
       } else {
         alert('NFT is now private successfully!');
+        window.location.reload(false);
       }
       const updatedNftDetails = { nftDetails };
       const updatedNfts = updatedNftDetails.nfts.map((nft) => {

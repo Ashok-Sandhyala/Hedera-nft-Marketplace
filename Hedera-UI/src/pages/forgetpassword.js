@@ -57,7 +57,7 @@ export default function ForgetPassword() {
 
   const handleValidate = async (event) => {
     event.preventDefault();
-    const checkEmailResponse = await axios.get("https://hederanft-server.onrender.com/check-email/" + email);
+    const checkEmailResponse = await axios.get("http://localhost:9000/check-email/" + email);
     if (!email) {
       alert('Please enter an email address before sending otp.');
       return;

@@ -149,7 +149,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("https://hederanft-server.onrender.com/viewpublishednfts")
+      .get("http://localhost:9000/viewpublishednfts")
       .then((response) => {
         setPublishedNFTs(response.data);
         
@@ -160,7 +160,7 @@ function Home() {
   }, []);
   
   useEffect(() => {
-    axios.get("https://hederanft-server.onrender.com/accountdetails/" + sessionStorage.email)
+    axios.get("http://localhost:9000/accountdetails/" + sessionStorage.email)
       .then((responce) => {
         sadata(responce.data);
         const dm = responce.data;
@@ -178,7 +178,7 @@ function Home() {
   }, [3]);
 
   // useEffect(() => {
-  //   axios.get("https://hederanft-server.onrender.com/collectiondetails/" + sessionStorage.email)
+  //   axios.get("http://localhost:9000/collectiondetails/" + sessionStorage.email)
   //     .then((responce) => {
   //       sHederaid(responce.data.HederaId);
   //       sprivatekey(responce.data.HederaPrivatekey);

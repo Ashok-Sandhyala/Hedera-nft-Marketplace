@@ -51,7 +51,7 @@ function Nftdetails() {
   const Updatenft = async () => {
     const nft_ref = rmv.NFT_ref;
     await axios
-      .put("https://hederanft-server.onrender.com/editnftdetails", {
+      .put("http://localhost:9000/editnftdetails", {
         aid,
         colname,
         nft_ref, 
@@ -76,7 +76,7 @@ function Nftdetails() {
 
   /*************************************deleteNFT*************************************************************/
   const Deletenft=(nft_ref)=>{
-    axios.delete(`https://hederanft-server.onrender.com/deletenft/${aid}/${colname}/${nft_ref}`)
+    axios.delete(`http://localhost:9000/deletenft/${aid}/${colname}/${nft_ref}`)
     .then((responce)=>{
         alert('NFT deleted with NFT_ref : ${nft_ref}');
         nav('/viewnft');

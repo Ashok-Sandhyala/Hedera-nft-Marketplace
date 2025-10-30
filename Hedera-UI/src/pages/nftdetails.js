@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { useWalletInterface } from "../services/wallets/useWalletInterface";
 import NavBar from "../components/Navbar";
 import ResponsiveAppBar from "./bar";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import { TextField, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Nftdetails() {
   const { walletInterface } = useWalletInterface();
@@ -30,6 +34,8 @@ function Nftdetails() {
   const [royality, setroyality] = useState([]);
   const [pltformcharge, setpltformcharge] = useState([]);
   const [rmv, srmv] = useState([])
+  const [royaltyAmount, setRoyaltyAmount] = useState(0);
+  const [platformChargeAmount, setPlatformChargeAmount] = useState(0);
 
 
   const openPopup = () => {
@@ -52,7 +58,7 @@ function Nftdetails() {
   const Updatenft = async () => {
     const nft_ref = rmv.NFT_ref;
     await axios
-      .put("https://hederanft-server.onrender.com/editnftdetails", {
+      .put("http://localhost:9000/editnftdetails", {
         aid,
         colname,
         nft_ref,
@@ -77,7 +83,7 @@ function Nftdetails() {
 
   /*************************************deleteNFT*************************************************************/
   const Deletenft = (TokenId) => {
-    axios.delete(`https://hederanft-server.onrender.com/deletenft/${aid}/${colname}/${TokenId}`)
+    axios.delete(`http://localhost:9000/deletenft/${aid}/${colname}/${TokenId}`)
       .then((responce) => {
         alert('NFT deleted with NFT_ref : ${TokenId}');
         nav('/viewnft');
@@ -89,9 +95,25 @@ function Nftdetails() {
 
 
 
+  const calculatePercentageAmount = (percentage, targetStateSetter) => {
+    const priceValue = parseFloat(price) || 0;
+    const percentageValue = parseFloat(percentage) || 0;
+    const calculatedAmount = (priceValue * percentageValue) / 100;
+    targetStateSetter(calculatedAmount.toFixed(5)); // Limiting to 5 decimal places
+  };
+
+  useEffect(() => {
+    calculatePercentageAmount(royality, setRoyaltyAmount);
+  }, [royality, price]);
+  useEffect(() => {
+    calculatePercentageAmount(pltformcharge, setPlatformChargeAmount);
+  }, [pltformcharge, price]);
+
+
+
   useEffect(() => {
     axios
-      .get(`https://hederanft-server.onrender.com/nftdetails/${nft_Ref}`)
+      .get(`http://localhost:9000/nftdetails/${nft_Ref}`)
       .then((response) => {
         setNFTDetails([response.data]);
       })
@@ -156,57 +178,100 @@ function Nftdetails() {
 
             {showPopup && (
               
-              <div className="popup">
-                <div className="popup-content">
-                  <span className="close-popup" onClick={closePopup}>
-                    &times;<Button variant='contained' sx={{ m: "0% 0% 0% 0%", background: "red" }} >Close</Button>
-                  </span>
+<Dialog open={showPopup} onClose={closePopup}>
+          <DialogTitle>
+            UPDATE Nft
+            <IconButton aria-label="close" onClick={closePopup}>
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent>
+            <form >
+               <TextField
+                label="Account Id"
+                variant="outlined"
+                name="Account Id"
+                value={aid}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Collection Name"
+                variant="outlined"
+                name="customNftname"
+                value={colname}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Name"
+                variant="outlined"
+                name="customNftsymbol"
+                value={nftname}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Symbol"
+                variant="outlined"
+                name="customNftdes"
+                value={nftsymbol}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Description"
+                variant="outlined"
+                name="customNftdes"
+                value={nftdes}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="NFT-Token Price"
+                variant="outlined"
+                type="number"
+                name="customPrice"
+                value={price}
+                fullWidth
+                margin="normal"
+                onChange={(e) => (setprice(e.target.value))}
+              />
+              <TextField
+                label="NFT-Token Royalty"
+                variant="outlined"
+                type="number"
+                name="customRoyality"
+                value={royality}
+                fullWidth
+                margin="normal"
+              />
+              <Grid item xs={12}>
+        <Typography variant="subtitle2" gutterBottom>
+          {royality !== '' && `(${royality}% of ${price} HBAR is ${royaltyAmount} HBAR)`}
+        </Typography>
+      </Grid>
+              <TextField
+                label="NFT Platform Price"
+                variant="outlined"
+                type="number"
+                name="customPltformcharge"
+                value={pltformcharge}
+                fullWidth
+                margin="normal"
+              /><Grid item xs={12}>
+              <Typography variant="subtitle2" gutterBottom>
+                {pltformcharge !== '' && `(${pltformcharge}% of ${price} HBAR is ${platformChargeAmount} HBAR)`}
+              </Typography>
+            </Grid>
+            <br/>
+              <Button variant='contained' color="primary" disabled={isLoading} onClick={Updatenft} fullWidth>
+                {isLoading ? 'UPDATING NFT...' : 'UPDATE NFT'}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
 
-                  <div className="createcol-container" id="editnft">
-                    <h2>Edit Nft</h2>
-                    <label>Account id : </label>
-                    <input type="text" name="id" value={aid} onChange={(e) => (setid(e.target.value))} />
-                    <br />
-                    <br />
-                    <label>Collection Name : </label>
-                    <input type="text" name="colname" value={colname} onChange={(e) => setcollname(e.target.value)} />
-                    <br />
-                    <br />
-                    <label> NFT-Token Name : </label>
-                    <input type="text" defaultValue={nftname} name="nftname" onChange={(e) => setnftname(e.target.value)} />
-                    <br />
-                    <br />
-                    <label >NFT-Token Symbol : </label>
-                    <input type="text" defaultValue={nftsymbol} name="nftsymbol" pattern="[A-Z]" onChange={(e) => setnftsymbol(e.target.value)} />
-                    <br />
-                    <br />
-                    <label>NFT-Token Description : </label>
-                    <input type="text" defaultValue={nftdes} name="nftdes" onChange={(e) => setnftdes(e.target.value)} />
-                    <br />
-                    <br />
-                    <label>NFT-Token Price : </label>
-                    <input type="number" defaultValue={price} onChange={(e) => setprice(e.target.value)} />
-                    <br />
-                    <br />
-                    <label> NFT-Token Royality :</label>
-                    <input type="number" defaultValue={royality} onChange={(e) => setroyality(e.target.value)} />
-                    <br />
-                    <br />
-                    <label> NFT Platform Price :</label>
-                    <input type="number" defaultValue={pltformcharge} onChange={(e) => setpltformcharge(e.target.value)} />
-                    <br />
-                    <br />
-                    {/* <label >NFT-Token-File : </label>
-        <input type="file" onChange={(e)=>setfile(e.target.files[0])} /> */}
-                    <br />
-                    <br />
-                    <button onClick={Updatenft} disabled={isLoading}>
-                      {isLoading ? 'Updating NFT...' : 'Update NFT'}
-                    </button>
-                  </div>
-
-                </div>
-              </div>
             )}
           </div>
         ))}
